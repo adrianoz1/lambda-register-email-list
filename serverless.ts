@@ -65,23 +65,23 @@ const serverlessConfiguration: AWS = {
       dbEmailList: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
-          TableName: "email_list",
+          TableName: "email-list",
           ProvisionedThroughput: {
             ReadCapacityUnits: 5,
             WriteCapacityUnits: 5
           },
           AttributeDefinitions: [
             {
-              AttributeName: "id",
+              AttributeName: "email",
               AttributeType: "S"
             }
           ],
           KeySchema: [
             {
-              AttributeName: "id",
+              AttributeName: "email",
               KeyType: "HASH"
             }
-          ]
+          ],
         }
       }
     }
