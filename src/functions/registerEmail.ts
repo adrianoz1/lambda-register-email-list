@@ -8,25 +8,42 @@ interface IRegisterEmail {
   email: string;
 }
 
+const TABLE_NAME = "email-list";
+
 export const handler: APIGatewayProxyHandler = async (event) => {
 
   const { name, email } = JSON.parse(event.body) as IRegisterEmail
 
-  await document.put({
-      TableName: "email-list",
+  const id = uuid()
+  const createdAt = new Date().getTime()
+
+  try {
+    await document.put({
+      TableName: TABLE_NAME,
       Item: {
-          id: uuid(),
+          id,
           name,
           email,
-          createdAt: new Date().getTime()
+          createdAt
       },
       ConditionExpression: "attribute_not_exists(Email)"
-  }).promise();
-  
-  return {
+    }).promise();
+
+    return {
       statusCode: 201,
       body: JSON.stringify({
           message: "Email registered successfully!",
       })
+    }
+  } catch (error) {
+    console.error(error)
+    
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+          message: "Error the email was not registered!",
+      })
+    }
   }
+ 
 }

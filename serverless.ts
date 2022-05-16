@@ -33,7 +33,20 @@ const serverlessConfiguration: AWS = {
           http: {
             path: "registerEmail",
             method: "post",
-            cors: true
+            cors: {
+              origins: [
+                "https://*.adrianoalmeida.dev",
+                "https://*.2dev.com.br"
+              ],
+              headers: [
+                'Content-Type',
+                'X-Amz-Date',
+                'Authorization',
+                'X-Api-Key',
+                'X-Amz-Security-Token',
+                'X-Amz-User-Agent',
+              ]
+            },
           }
         }
       ]
