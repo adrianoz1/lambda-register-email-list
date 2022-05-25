@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from "aws-lambda"
 import { document } from "../utils/dynamodbClient"
-import { uuid } from 'uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IRegisterEmail {
   id: string;
@@ -14,7 +14,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   const { name, email } = JSON.parse(event.body) as IRegisterEmail
 
-  const id = uuid()
+  const id = uuidv4()
   const createdAt = new Date().getTime()
 
   try {
@@ -28,22 +28,15 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       },
       ConditionExpression: "attribute_not_exists(Email)"
     }).promise();
-
     return {
       statusCode: 201,
       body: JSON.stringify({
           message: "Email registered successfully!",
       })
     }
-  } catch (error) {
-    console.error(error)
     
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-          message: "Error the email was not registered!",
-      })
-    }
+  } catch (err) {
+    throw Error(err)
   }
  
 }
